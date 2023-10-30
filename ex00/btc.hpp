@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 12:38:49 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/10/27 21:58:31 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:53:21 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@
 #include <fstream>
 #include <sstream>
 
-// Alias
-typedef std::multimap<std::string, float> intMap;
-
 // Function prototype
 void ft_error(std::string message);
-intMap getInputData(std::ifstream &file);
+void calculateInput(std::ifstream &file, std::map<std::string, float> &inpData);
+std::map<std::string, float> getData(void);

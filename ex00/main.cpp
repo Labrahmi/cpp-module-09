@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:36:28 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/10/28 01:54:04 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:17:42 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,16 @@ bool splitDateAndValue(const std::string &line, std::string &date, std::string &
         if (std::getline(stream, value))
         {
             value = value.substr(value.find_first_not_of(' '));
-            return true;
+            return (true);
         }
     }
-    return false;
+    return (false);
 }
 
-intMap getInputData(std::ifstream &file)
+void calculateInput(std::ifstream &file, std::map<std::string, float> &inpData)
 {
     // ====================================================
-    intMap map;
-    int intValue;
+    float f_value = 0;
     std::string fline, line;
     std::string date, value;
 
@@ -50,58 +49,79 @@ intMap getInputData(std::ifstream &file)
         if (splitDateAndValue(line, date, value))
         {
             std::stringstream valueStream(value);
-            if (valueStream >> intValue)
+            if (valueStream >> f_value)
             {
-                // std::cout << date << " <> " << intValue << std::endl;
-                // map.insert(std::);
-                // map.insert(std::pair<int, std::string>(1, "Hey"));
-                // map[date] = intValue;
+                if (f_value < 0)
+                    std::cout << "Error: not a positive number." << std::endl;
+                else if (f_value > 1000)
+                    std::cout << "Error: too large a number." << std::endl;
+                else
+                {
+                    std::map<std::string, float>::iterator it = inpData.lower_bound(date);
+                    if (it == inpData.end() || it->first != date)
+                    {
+                        if (it != inpData.begin())
+                            --it;
+                        else
+                            it = inpData.begin();
+                    }
+
+                    std::cout << date << " => " << f_value << " = " << (it->second * f_value) << std::endl;
+                }
             }
             else
             {
-                std::cout << "Error: " << std::endl;
+                std::cout << "Error: too large a number." << std::endl;
             }
-            // map[date] = 1;
         }
         else
             std::cerr << "Error: bad input => " << line << std::endl;
     }
     // ====================================================
-    return map;
+}
+
+std::map<std::string, float> getData(void)
+{
+    std::string line;
+    std::map<std::string, float> dataMap;
+    std::ifstream dataFile("data/data.csv");
+    float btcValue = 0;
+    // ====================================================
+    if (!dataFile.is_open())
+        ft_error("Could not open data file.");
+    std::getline(dataFile, line);
+    while (std::getline(dataFile, line))
+    {
+        int st = (line.length() - 11);
+        std::stringstream btcValueStream(line.substr(11, st));
+        btcValueStream >> btcValue;
+        dataMap[line.substr(0, 10)] = btcValue;
+    }
+    // ====================================================
+    return dataMap;
+    // ====================================================
 }
 
 int main(int ac, char **av)
 {
     // ====================================================
     std::ifstream file(av[1]);
-    intMap inpData;
+    std::map<std::string, float> inpData;
     // ====================================================
     if (ac == 1)
         ft_error("Could not open file.");
     if (!file.is_open())
         ft_error("Could not open file.");
     // ====================================================
-    inpData = getInputData(file);
-    intMap::iterator it = inpData.begin();
-    while (it != inpData.end())
-    {
-        std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
-        ++it;
-    }
+    inpData = getData();
+    std::map<std::string, float>::iterator it = inpData.begin();
+    // while (it != inpData.end())
+    // {
+    //     std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
+    //     ++it;
+    // }
+    calculateInput(file, inpData);
     file.close();
     // ====================================================
 }
 
-// $> ./btc
-// Error: could not open file.
-// $> ./btc input.txt
-// 2011-01-03 => 3 = 0.9
-// 2011-01-03 => 2 = 0.6
-// 2011-01-03 => 1 = 0.3
-// 2011-01-03 => 1.2 = 0.36
-// 2011-01-09 => 1 = 0.32
-// Error: not a positive number.
-// Error: bad input => 2001-42-42
-// 2012-01-11 => 1 = 7.1
-// Error: too large a number.
-// $>
