@@ -6,7 +6,7 @@
 /*   By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 19:36:28 by ylabrahm          #+#    #+#             */
-/*   Updated: 2023/10/30 16:17:42 by ylabrahm         ###   ########.fr       */
+/*   Updated: 2023/10/31 07:50:14 by ylabrahm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,14 @@ void calculateInput(std::ifstream &file, std::map<std::string, float> &inpData)
     {
         if (splitDateAndValue(line, date, value))
         {
+            // ====================================================
+            literal_type inputType = setLetType(value);
+            if (inputType != e_INT && inputType != e_DOUBLE)
+            {
+                std::cerr << "Error: bad input => " << line << std::endl;
+                continue;
+            }
+            // ====================================================
             std::stringstream valueStream(value);
             if (valueStream >> f_value)
             {
@@ -73,6 +81,7 @@ void calculateInput(std::ifstream &file, std::map<std::string, float> &inpData)
             {
                 std::cout << "Error: too large a number." << std::endl;
             }
+            // ====================================================
         }
         else
             std::cerr << "Error: bad input => " << line << std::endl;
@@ -114,14 +123,7 @@ int main(int ac, char **av)
         ft_error("Could not open file.");
     // ====================================================
     inpData = getData();
-    std::map<std::string, float>::iterator it = inpData.begin();
-    // while (it != inpData.end())
-    // {
-    //     std::cout << "Key: " << it->first << ", Value: " << it->second << std::endl;
-    //     ++it;
-    // }
     calculateInput(file, inpData);
     file.close();
     // ====================================================
 }
-
