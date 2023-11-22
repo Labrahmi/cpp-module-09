@@ -1,52 +1,77 @@
 
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <ctime>
 #include "sorting.hpp"
 
-std::vector<int> split_vec(const std::vector<int>& arr, int mode = 0)
+typedef struct s_pair
 {
-    size_t half_size = (arr.size() / 2);
-    std::vector<int> temp;
-    if (mode == 0)
-        temp.assign(arr.begin(), arr.begin() + half_size);
-    else
-        temp.assign(arr.begin() + half_size, arr.end());
-    std::cout << yellowText << x++ << ": " << resetText;
-    if (temp.size() == 2)
+    unsigned int _first;
+    unsigned int _second;
+    bool hasNoSecond;
+} t_pair;
+
+void printPairs(std::vector<t_pair> &vecOfPairs)
+{
+    int i = 0;
+    while (i < vecOfPairs.size())
     {
-        if (temp[0] > temp[1])
+        std::cout << "(" << vecOfPairs[i]._first;
+        if (vecOfPairs[i].hasNoSecond)
+            std::cout << ", " << vecOfPairs[i]._second;
+        std::cout << ")" << std::endl;
+        i++;
+    }
+}
+
+void swapIfNotOrde(t_pair &pair)
+{
+    unsigned int temp;
+    if (pair._first > pair._second)
+    {
+        temp = pair._first;
+        pair._first = pair._second;
+        pair._second = temp;
+    }
+}
+
+void PmergeMe(std::vector<unsigned int> &arr)
+{
+    std::vector<t_pair> vecOfPairs;
+    std::vector<unsigned int>::iterator it = arr.begin();
+    int i = 0;
+    while (it != arr.end())
+    {
+        t_pair p;
+        p.hasNoSecond = false;
+        p._first = (*it);
+        it++;
+        if (it != arr.end())
         {
-            int temp_val = temp[0];
-            temp[0] = temp[1];
-            temp[1] = temp_val;
+            p._second = (*it);
+            p.hasNoSecond = true;
+            it++;
         }
+        vecOfPairs.push_back(p);
     }
-    print_container(temp, mode);
-    return temp;
-}
-
-void PmergeMe(const std::vector<int>& arr)
-{
-    if (arr.size() > 2)
+    printPairs(vecOfPairs);
+    std::cout << "-------------------------------" << std::endl;
+    i = 0;
+    while (i < vecOfPairs.size())
     {
-        PmergeMe(split_vec(arr, 0));
-        PmergeMe(split_vec(arr, 1));
+        swapIfNotOrde(vecOfPairs[i]);
+        i++;
     }
+    printPairs(vecOfPairs);
 }
 
-int main()
+int main(void)
 {
     srand(static_cast<unsigned int>(time(0)));
     // -------------------------------
     unsigned int arr_size = 16;
-    std::vector<int> arr;
+    std::vector<unsigned int> arr;
     for (size_t i = arr_size; i > 0; --i)
-        arr.push_back(i);
-    print_container(arr, 2);
-    std::cout << "<-------------------------->" << std::endl;
-    // -------------------------------
+        arr.push_back(rand() % (100));
+    print_container(arr);
+    std::cout << "-------------------------------" << std::endl;
     PmergeMe(arr);
     return 0;
 }
