@@ -23,12 +23,19 @@ std::string resetText = "\033[0m";
 
 void PmergeMe(const std::vector<unsigned int>& arr);
 
-template <typename T>
-void print_container(T container)
-{
-    for (size_t i = 0; i < container.size(); ++i)
-        std::cout << container[i] << " ";
-    std::cout << std::endl;
-}
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+bool isOddLength(const std::vector<int>& arr);
+int findStraggler(std::vector<int>& arr);
+std::vector<std::vector<int>> createPairs(const std::vector<int>& arr);
+std::vector<std::vector<int>> sortEachPair(const std::vector<std::vector<int>>& splitArray);
+void insertionSortPairs(std::vector<std::vector<int>>& A, int n);
+int jacobsthal(int n);
+std::vector<int> buildJacobInsertionSequence(const std::vector<int>& array);
+void sortLargerValue(std::vector<std::vector<int>>& sortedSplitArray);
+std::vector<int> createS(const std::vector<std::vector<int>>& sortedSplitArray, int straggler, bool printComparisonEstimation);
+std::vector<int> mergeInsertionSort(std::vector<int> A);
 
 #endif
