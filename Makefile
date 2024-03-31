@@ -1,5 +1,5 @@
 # Makefile
-SRCS = main.cpp
+SRCS = src/main.cpp src/PmergeMe.cpp src/utils.cpp
 
 OBJS := $(SRCS:.cpp=.o)
 OBJS := $(addprefix obj/, $(OBJS))
@@ -7,7 +7,8 @@ OBJS := $(addprefix obj/, $(OBJS))
 CC = c++
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror -std=c++11
-NAME = out
+NAME = PmergeMe
+INCLUDES = -Iinclude
 
 all: $(NAME)
 
@@ -16,7 +17,7 @@ $(NAME): $(OBJS)
 
 obj/%.o: %.cpp
 	@mkdir -p $(shell dirname $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(INCLUDES) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS)
