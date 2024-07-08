@@ -1,22 +1,10 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: ylabrahm <ylabrahm@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/10/18 18:12:29 by macbook           #+#    #+#              #
-#    Updated: 2023/10/31 07:49:31 by ylabrahm         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 SRCS = main.cpp typeTool.cpp
 OBJS := $(SRCS:.cpp=.o)
 OBJS := $(addprefix obj/, $(OBJS))
 
 CC = c++
 RM = rm -f
-CFLAGS = -std=c++98 #-Wall -Wextra -Werror 
+CFLAGS = -std=c++98 -Wall -Wextra -Werror 
 NAME = btc
 
 all: $(NAME)
